@@ -1,9 +1,9 @@
 import { bitable, dashboard, DashboardState } from './sdk/index.mjs';
-const TABLE='看板数据_勿改';
+const TABLE_ID='tblRwLlFsupGE6JQ';
 const boot=document.getElementById('boot');
 function txt(v){return Array.isArray(v)?v.map(x=>x&&x.text||'').join(''):(v==null?'':String(v));}
 async function loadViaBitable(){
-  const t=await bitable.base.getTableByName(TABLE);
+  const t=await bitable.base.getTableById(TABLE_ID);
   const fs=await t.getFieldMetaList();const fi=n=>fs.find(f=>f.name===n).id;
   const fSeq=fi('序号'),fC=fi('内容');let rows=[],pt;
   do{const r=await t.getRecords({pageSize:5000,pageToken:pt});rows=rows.concat(r.records);pt=r.hasMore?r.pageToken:undefined;}while(pt);
@@ -28,7 +28,7 @@ async function start(){
     const cfg=document.getElementById('cfg');cfg.style.display='block';
     document.getElementById('save').onclick=async()=>{
       try{
-        const t=await bitable.base.getTableByName(TABLE);const fs=await t.getFieldMetaList();const fi=n=>fs.find(f=>f.name===n).id;
+        const t=await bitable.base.getTableById(TABLE_ID);const fs=await t.getFieldMetaList();const fi=n=>fs.find(f=>f.name===n).id;
         await dashboard.saveConfig({customConfig:{v:1},dataConditions:[{tableId:t.id,groups:[{fieldId:fi('序号')},{fieldId:fi('内容')}],series:'COUNTA'}]});
         document.getElementById('cfgmsg').textContent='已保存';
       }catch(e){document.getElementById('cfgmsg').textContent='保存失败：'+e.message}
