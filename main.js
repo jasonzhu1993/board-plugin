@@ -2,24 +2,16 @@ import { bitable, dashboard, DashboardState } from './sdk/index.mjs';
 const TABLE_ID='tblRwLlFsupGE6JQ';
 const boot=document.getElementById('boot');
 function txt(v){return Array.isArray(v)?v.map(x=>x&&x.text||'').join(''):(v==null?'':String(v));}
-async function loadViaBitable(){
-  const t=await bitable.base.getTableById(TABLE_ID);
-  const fs=await t.getFieldMetaList();const fi=n=>fs.find(f=>f.name===n).id;
-  const fSeq=fi('序号'),fC=fi('内容');let rows=[],pt;
-  do{const r=await t.getRecords({pageSize:5000,pageToken:pt});rows=rows.concat(r.records);pt=r.hasMore?r.pageToken:undefined;}while(pt);
-  rows.sort((a,b)=>Number(txt(a.fields[fSeq]))-Number(txt(b.fields[fSeq])));
-  return {json:rows.map(r=>txt(r.fields[fC])).join(''),tableId:t.id,fSeq,fC};
-}
-async function loadViaDashboard(){
-  const d=await dashboard.getData();
-  const rows=d.slice(1).map(r=>[Number(r[0].value??r[0].text),r[1].text??r[1].value]);
-  rows.sort((a,b)=>a[0]-b[0]);return {json:rows.map(r=>r[1]).join('')};
-}
+function decode(texts){const map=new Map();for(const t of texts){const mm=/^(\d{4})\|/.exec(t||'');if(mm&&!map.has(mm[1]))map.set(mm[1],t.slice(5));}
+  const keys=[...map.keys()].sort();if(!keys.length)throw new Error('未找到看板数据');const P=JSON.parse(keys.map(k=>map.get(k)).join(''));if(!P||!P.D||!P.D.K)throw new Error('看板数据不完整');return P;}
+async function loadViaDashboard(){const d=await dashboard.getData();const t=[];d.forEach(r=>r.forEach(x=>{if(x&&typeof x.text==='string')t.push(x.text);if(x&&typeof x.value==='string')t.push(x.value);}));return decode(t);}
+async function loadViaBitable(){const tb=await bitable.base.getTableById(TABLE_ID);const fs=await tb.getFieldMetaList();const fC=fs.find(f=>f.name==='内容').id;let rows=[],pt;
+  do{const r=await tb.getRecords({pageSize:5000,pageToken:pt});rows=rows.concat(r.records);pt=r.hasMore?r.pageToken:undefined;}while(pt);
+  return decode(rows.map(r=>txt(r.fields[fC])));}
 async function start(){
-  let res,how;
-  try{res=await loadViaBitable();how='bitable';}catch(e1){
-    try{res=await loadViaDashboard();how='dashboard';}catch(e2){boot.textContent='数据读取失败：'+e1.message+' / '+e2.message;throw e2;}}
-  const P=JSON.parse(res.json);
+  let P,how,errs=[];
+  for(const [n,f] of [['dashboard',loadViaDashboard],['bitable',loadViaBitable]]){try{P=await f();how=n;break;}catch(e){errs.push(n+': '+(e&&e.message||e));}}
+  if(!P){boot.textContent='数据读取失败：'+errs.join(' / ');return;}
   window.__how=how;
   render(P);
   boot.style.display='none';document.getElementById('app').style.display='block';
