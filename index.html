@@ -1,40 +1,65 @@
 <!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Board</title><style>
-*{box-sizing:border-box}body{margin:0;background:#f4f6fa;font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:#1f2329;font-size:13px}
-#w{min-width:1200px;max-width:1440px;margin:0 auto;padding:20px 24px 30px}.hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px}
-h1{font-size:22px;margin:0}.sub{color:#646a73;font-size:12px;margin-top:4px}.tag{display:inline-block;padding:2px 8px;border-radius:10px;background:#e1eaff;color:#245bdb;font-size:11px;margin-left:8px;vertical-align:3px}
-.card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(31,35,41,.08);padding:14px 16px}
-.kpis{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:12px}.kpi .l{font-size:12px;color:#646a73}.kpi .v{font-size:24px;font-weight:700;margin-top:4px}.kpi .s{font-size:11px;color:#8f959e;margin-top:2px}
-.ai{border:1px solid #d6e2ff;background:linear-gradient(90deg,#eef3ff,#fff);margin-bottom:12px}.ai h3{margin:0 0 6px;font-size:14px}.ai ol{margin:0;padding-left:20px;line-height:1.8}
-.sec{font-size:15px;font-weight:650;margin:18px 0 8px;padding-left:9px;border-left:3px solid #3370ff}.sec span{font-weight:400;color:#8f959e;font-size:12px;margin-left:6px}
-table{width:100%;border-collapse:collapse}th{font-weight:500;color:#646a73;text-align:left;padding:7px 6px;border-bottom:1px solid #e8eaed;font-size:12px;white-space:nowrap}td{padding:7px 6px;border-bottom:1px solid #f2f3f5;vertical-align:middle}
-tr.row{cursor:pointer}tr.row:hover{background:#f5f8ff}tr.sel{background:#eef3ff}
-.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.red{background:#f54a45}.amber{background:#ffb000}.green{background:#34c724}
+:root{--bg:#0b0f19;--card:#131a29;--card2:#182136;--bd:#232c40;--bd2:#1b2335;--tx:#e6eaf2;--tx2:#c3cad8;--mu:#97a1b5;--mu2:#6c768b;--ac:#5b8cff;--ac2:#8b6bff;--acx:#8fb0ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);background-image:radial-gradient(900px 380px at 100% -8%,rgba(139,107,255,.13),transparent 60%),radial-gradient(800px 360px at -10% 0,rgba(91,140,255,.10),transparent 60%);background-attachment:fixed;font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:var(--tx);font-size:13px}
+#w{min-width:1200px;max-width:1440px;margin:0 auto;padding:20px 24px 30px}.hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;gap:16px}
+h1{font-size:22px;margin:0;letter-spacing:.5px;background:linear-gradient(90deg,#fff,#b9c8ff);-webkit-background-clip:text;background-clip:text;color:transparent}.sub{color:var(--mu);font-size:12px;margin-top:4px}.tag{display:inline-block;padding:2px 8px;border-radius:10px;background:rgba(91,140,255,.16);color:var(--acx);font-size:11px;margin-left:8px;vertical-align:3px;-webkit-text-fill-color:var(--acx)}
+.card{background:linear-gradient(180deg,var(--card),#111727);border:1px solid var(--bd);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.25);padding:14px 16px}
+.kpis{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:12px}.kpi{position:relative;overflow:hidden}.kpi:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--ac),var(--ac2));opacity:.75}.kpi .l{font-size:12px;color:var(--mu)}.kpi .v{font-size:24px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}.kpi .s{font-size:11px;color:var(--mu2);margin-top:2px}
+.ai{border:1px solid rgba(91,140,255,.35);background:linear-gradient(90deg,rgba(91,140,255,.12),rgba(139,107,255,.05) 60%,var(--card));margin-bottom:12px}.ai h3{margin:0 0 6px;font-size:14px}.ai ol{margin:0;padding-left:20px;line-height:1.8}
+.sec{font-size:15px;font-weight:650;margin:18px 0 8px;padding-left:9px;border-left:3px solid var(--ac)}.sec span{font-weight:400;color:var(--mu2);font-size:12px;margin-left:6px}
+table{width:100%;border-collapse:collapse}th{font-weight:500;color:var(--mu);text-align:left;padding:7px 6px;border-bottom:1px solid var(--bd);font-size:12px;white-space:nowrap}td{padding:7px 6px;border-bottom:1px solid var(--bd2);vertical-align:middle}
+tr.row{cursor:pointer}tr.row:hover{background:rgba(91,140,255,.07)}tr.sel{background:rgba(91,140,255,.12)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.red{background:#ff5d58;box-shadow:0 0 8px rgba(255,93,88,.7)}.amber{background:#ffb84a;box-shadow:0 0 8px rgba(255,184,74,.6)}.green{background:#3ddc84;box-shadow:0 0 8px rgba(61,220,132,.5)}
 .hc{display:inline-block;min-width:44px;text-align:center;padding:2px 4px;border-radius:4px;font-variant-numeric:tabular-nums}
 .chip{display:inline-block;padding:1px 7px;border-radius:4px;font-size:11px;margin:1px 3px 1px 0;white-space:nowrap}
-.c不足{background:#fde2e2;color:#d83931}.c卡点{background:#feead2;color:#c25e00}.c单点{background:#fde2e2;color:#d83931}.c富余{background:#e1f5e6;color:#1f8a37}.c配比{background:#ece2fe;color:#6b3fd1}
-.num{font-variant-numeric:tabular-nums}.muted{color:#8f959e}
+.c不足{background:rgba(255,93,88,.16);color:#ff8a85}.c卡点{background:rgba(255,145,60,.16);color:#ffab6b}.c单点{background:rgba(255,93,88,.16);color:#ff8a85}.c富余{background:rgba(61,220,132,.13);color:#5fe39b}.c配比{background:rgba(139,107,255,.18);color:#b9a4ff}
+.num{font-variant-numeric:tabular-nums}.muted{color:var(--mu2)}
 .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
-.bar{display:flex;height:14px;border-radius:4px;overflow:hidden}.lg{font-size:11px;color:#646a73;margin-top:5px}.lg i{display:inline-block;width:8px;height:8px;border-radius:2px;margin:0 3px 0 8px}
-.aig{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:6px}.ac{background:#fff;border-radius:8px;padding:10px 12px;border-left:3px solid #3370ff}.ac .t{font-weight:650;font-size:14px;margin-bottom:4px}.ac .b{line-height:1.65;color:#373c43}.ac .s{margin-top:6px;font-size:12px;color:#245bdb;font-weight:600}
-.mask{position:fixed;inset:0;background:rgba(15,20,30,.45);display:none;z-index:50}.mask.on{display:block}
-.modal{position:fixed;left:50%;top:4vh;transform:translateX(-50%);width:min(1240px,94vw);max-height:92vh;overflow:auto;background:#f4f6fa;border-radius:12px;padding:16px 18px;z-index:51;display:none;box-shadow:0 10px 40px rgba(0,0,0,.25)}.modal.on{display:block}
-.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.mh b{font-size:17px}.x{cursor:pointer;font-size:22px;color:#646a73;padding:0 6px}
-.pn{color:#245bdb;cursor:pointer}.pn:hover{text-decoration:underline}
-.gt{font-weight:650;margin:14px 0 4px}.gt span{font-weight:400;color:#8f959e;font-size:12px}
-.fb{width:100%;min-height:70px;border:1px dashed #c9cdd4;border-radius:6px;padding:8px;color:#8f959e;font-size:12px;background:#fafbfc}
-.foot{font-size:11.5px;color:#8f959e;line-height:1.7;margin-top:14px}
-
-#boot{padding:40px;color:#646a73;font-size:14px}#cfg{padding:16px;background:#fff;border-bottom:1px solid #e8eaed;display:none}#cfg button{background:#3370ff;color:#fff;border:0;border-radius:6px;padding:7px 16px;cursor:pointer;margin-left:10px}</style></head><body>
+.bar{display:flex;height:14px;border-radius:4px;overflow:hidden}.lg{font-size:11px;color:var(--mu);margin-top:5px}.lg i{display:inline-block;width:8px;height:8px;border-radius:2px;margin:0 3px 0 8px}
+.aig{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:6px}.ac{background:rgba(10,14,24,.55);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;border-left:3px solid var(--ac)}.ac .t{font-weight:650;font-size:14px;margin-bottom:4px}.ac .b{line-height:1.65;color:var(--tx2)}.ac .s{margin-top:6px;font-size:12px;color:var(--acx);font-weight:600}
+.mask{position:fixed;inset:0;background:rgba(2,5,12,.62);backdrop-filter:blur(3px);display:none;z-index:50}.mask.on{display:block}
+.modal{position:fixed;left:50%;top:4vh;transform:translateX(-50%);width:min(1240px,94vw);max-height:92vh;overflow:auto;background:#0e1422;border:1px solid var(--bd);border-radius:14px;padding:16px 18px;z-index:51;display:none;box-shadow:0 20px 60px rgba(0,0,0,.6)}.modal.on{display:block}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.mh b{font-size:17px}.x{cursor:pointer;font-size:22px;color:var(--mu);padding:0 6px}
+.pn{color:var(--acx);cursor:pointer}.pn:hover{text-decoration:underline}
+.gt{font-weight:650;margin:14px 0 4px}.gt span{font-weight:400;color:var(--mu2);font-size:12px}
+.fb{width:100%;min-height:70px;border:1px dashed var(--bd);border-radius:6px;padding:8px;color:var(--mu2);font-size:12px;background:rgba(255,255,255,.02)}
+.foot{font-size:11.5px;color:var(--mu2);line-height:1.7;margin-top:14px}
+svg text{fill:var(--tx2)}svg text.m{fill:var(--mu2)}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+html{color-scheme:dark}::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#2a3550;border-radius:4px}::-webkit-scrollbar-track{background:transparent}
+/* 时间选择器 */
+.rg{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:4px;flex-wrap:wrap;justify-content:flex-end}
+.rg button{border:0;background:transparent;color:var(--mu);padding:5px 10px;border-radius:7px;cursor:pointer;font:inherit;font-size:12px;white-space:nowrap}.rg button:hover{color:var(--tx);background:var(--card2)}
+.rg button.on{color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 3px 12px rgba(91,140,255,.35)}
+.rg input{background:var(--bg);border:1px solid var(--bd);color:var(--tx);border-radius:7px;padding:4px 6px;font:inherit;font-size:12px;color-scheme:dark}
+.rg .cu{display:none;align-items:center;gap:4px}.rg.cust .cu{display:flex}
+.rmsg{color:#ffb84a;font-size:12px;margin-top:4px;text-align:right;min-height:16px}
+/* BP 跟进时间线 */
+.tl{border-left:2px solid var(--bd);margin:10px 0 0 6px;padding-left:14px}.tl .it{position:relative;margin-bottom:12px}.tl .it:before{content:"";position:absolute;left:-20px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px #131a29}
+.tl .h{font-size:12px}.tl .h b{margin-right:6px}.tl .n{color:var(--tx2);margin-top:3px;line-height:1.6}.tl .r{color:var(--mu);font-size:12px;margin-top:2px}
+#boot{padding:40px;color:var(--mu);font-size:14px}#cfg{padding:16px;background:var(--card);border-bottom:1px solid var(--bd);display:none}#cfg button{background:var(--ac);color:#fff;border:0;border-radius:6px;padding:7px 16px;cursor:pointer;margin-left:10px}
+/* 手机 / 窄屏 */
+@media (max-width:760px){
+ #w{min-width:0;padding:12px 10px 24px}.hd{flex-direction:column;align-items:stretch}h1{font-size:18px}
+ .rg{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none}.rg::-webkit-scrollbar{display:none}.rmsg{text-align:left}
+ .kpis{grid-template-columns:repeat(2,1fr);gap:8px}.kpi .v{font-size:20px}.card{padding:12px}
+ .aig{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}
+ .tw table{min-width:980px}.tw.s table{min-width:640px}
+ .modal{top:0;left:0;transform:none;width:100vw;max-height:100vh;height:100vh;border-radius:0;padding:12px}
+ #m2{top:0!important;width:100vw!important}
+}
+</style></head><body>
 <div id="cfg"><b>业务线资源配置看板</b><span class="muted" style="margin-left:8px">数据源：本多维表格「数据看板」表</span><button id="save">保存到仪表盘</button><span id="cfgmsg" class="muted" style="margin-left:10px"></span></div>
 <div id="boot">加载中…</div><div id="app" style="display:none"><div id="w">
-<div class="hd"><div><h1>业务线资源配置看板<span class="tag">Demo</span></h1><div class="sub">口径：PMO 资源池（业务线人员表，按人力系数）× APP 使用时长 · 数据 2026/11/16–11/19（完整工作日）· 每日自动更新 · 不含人力、财务</div></div><div class="sub" id="upd"></div></div>
+<div class="hd"><div><h1>业务线资源配置看板<span class="tag">Demo</span></h1><div class="sub" id="cap">口径：PMO 资源池（业务线人员表，按人力系数）× APP 使用时长 · 每日自动更新 · 不含人力、财务</div></div>
+<div><div class="rg" id="rg"><button data-p="all">全部</button><button data-p="d1">最近 1 天</button><button data-p="d3">最近 3 天</button><button data-p="tw">本周</button><button data-p="lw">上周</button><button data-p="cu">自定义</button><span class="cu"><input type="date" id="ra"><span class="muted">–</span><input type="date" id="rb"></span></div><div class="rmsg" id="rmsg"></div><div class="sub" id="upd" style="text-align:right"></div></div></div>
 <div class="kpis" id="kpis"></div>
 <div class="card ai"><h3>AI 研判</h3><div id="ai" class="aig"></div></div>
 <div class="sec">一、业务线配比 × 负荷<span>负荷 = 扣除疑似 AI 工时后的人均日活跃时长；职能格颜色 = 与全公司同职能均值的差；无问题的业务线不出分析；点击行查看详情</span></div>
-<div class="card"><table><thead><tr><th>业务线</th><th>人数</th><th>人力系数</th><th>产研比</th><th>测开比</th><th>日均 h</th><th>高负荷 &gt;10h</th><th>低负荷 &lt;8h</th><th>产品</th><th>研发</th><th>测试</th><th>设计</th><th style="width:330px">AI 分析</th></tr></thead><tbody id="tb"></tbody></table></div>
+<div class="card tw"><table><thead><tr><th>业务线</th><th>人数</th><th>人力系数</th><th>产研比</th><th>测开比</th><th>日均 h</th><th>高负荷 &gt;10h</th><th>低负荷 &lt;8h</th><th>产品</th><th>研发</th><th>测试</th><th>设计</th><th style="width:330px">AI 分析</th></tr></thead><tbody id="tb"></tbody></table></div>
 
 <div class="sec">二、调整建议清单<span>按优先级排序</span></div>
-<div class="card"><table><thead><tr><th style="width:90px">类型</th><th style="width:170px">业务线</th><th>依据</th><th style="width:230px">建议动作</th></tr></thead><tbody id="sug"></tbody></table></div>
-<div class="foot">口径说明：① 人力系数 = 一个人分配在该业务线的时间比例（1.0 = 全职），按系数统计人力，不按人头；② 产研比 = 产品:研发，测开比 = 测试:研发（均按人力系数）；③ 产研比参考 1:3–1:5、测开比参考 1:3–1:5（金融类偏 1:3），超出 1:2–1:6 / 1:2–1:5 标黄；比例异常且对应职能负荷也异常才判定为问题；④ 高负荷 &gt;10h、低负荷 &lt;8h，只计当天活跃 ≥1h 的工作日；⑤ 疑似 AI 工时 = 0–8 点连续 ≥3 小时仅一个应用满负荷运行，已从工时中扣除；⑥ APP 使用时长反映电脑活跃，不等于产出；样本 ≤2 人的职能格仅供参考；需连续多周持续才可作为调整依据。</div>
+<div class="card tw s"><table><thead><tr><th style="width:90px">类型</th><th style="width:170px">业务线</th><th>依据</th><th style="width:230px">建议动作</th></tr></thead><tbody id="sug"></tbody></table></div>
+<div class="foot">口径说明：① 人力系数 = 一个人分配在该业务线的时间比例（1.0 = 全职），按系数统计人力，不按人头；② 产研比 = 产品:研发，测开比 = 测试:研发（均按人力系数）；③ 产研比参考 1:3–1:5、测开比参考 1:3–1:5（金融类偏 1:3），超出 1:2–1:6 / 1:2–1:5 标黄；比例异常且对应职能负荷也异常才判定为问题；④ 高负荷 &gt;10h、低负荷 &lt;8h，只计当天活跃 ≥1h 的工作日；⑤ 疑似 AI 工时 = 0–8 点连续 ≥3 小时仅一个应用满负荷运行，已从工时中扣除；⑥ APP 使用时长反映电脑活跃，不等于产出；样本 ≤2 人的职能格仅供参考；需连续多周持续才可作为调整依据；⑦ 时间范围只影响工时类数字（日均、高/低负荷、趋势），AI 研判、信号与调整建议按全部数据生成。</div>
 </div><div class="mask" id="mk" onclick="closeAll()"></div><div class="modal" id="m1"><div class="mh"><b id="ddt"></b><span class="x" onclick="closeAll()">×</span></div><div id="dd"></div></div><div class="modal" id="m2" style="z-index:53;width:min(900px,92vw);top:7vh"><div class="mh"><b id="pt"></b><span class="x" onclick="closeP()">×</span></div><div id="pd"></div></div></div>
-<script type="module" src="./main.js?v=3"></script></body></html>
+<script type="module" src="./main.js?v=4"></script></body></html>
